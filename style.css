@@ -1,9 +1,10 @@
 body {
 	text-align: center;
+	background-color: antiquewhite;
 }
 
 #board {
-	display: grid;
+	display: none;
 	grid-template-columns: repeat(8, 50px);
 	grid-template-rows: repeat(8, 50px);
 	column-gap: 0px;
@@ -31,4 +32,42 @@ body {
 
 * {
 	font-family: Arial, Helvetica, sans-serif;
+}
+
+#play-white {
+	cursor: pointer;
+	outline: 0;
+	color: black;
+	display: inline-block;
+	font-weight: 900;
+	line-height: 1.5;
+	text-align: center;
+	border: 1px solid transparent;
+	padding: 6px 12px;
+	font-size: 16px;
+	border-radius: 0.25rem;
+}
+
+#play-white:hover {
+	background-color: white;
+	color: black;
+}
+
+#play-black {
+	cursor: pointer;
+	outline: 0;
+	color: black;
+	display: inline-block;
+	font-weight: 900;
+	line-height: 1.5;
+	text-align: center;
+	border: 1px solid transparent;
+	padding: 6px 12px;
+	font-size: 16px;
+	border-radius: 0.25rem;
+}
+
+#play-black:hover {
+	background-color: black;
+	color: white;
 }
