@@ -28,50 +28,44 @@ function gameStart() {
 	});
 }
 
+let firstClickedCoordinates;
+let firstClickedSquare;
+let secondClickedCoordinates;
+let secondClickedSquare;
+let pieceSelected;
+let firstClick = false;
+
 function generalMovement() {
-	let firstClick = false;
-	let pieceSelected;
+	//No capturing logic yet
 	squares.forEach((square) => {
 		square.addEventListener('click', () => {
 			if (!gameSetup && gameOngoing) {
 				if (!firstClick && square.textContent !== '') {
-					setTimeout(() => {
-						square.style.opacity = 0.5;
-					}, 2000);
+					// When clicking a piece for the first time
 					firstClick = true;
+					firstClickedCoordinates = square.id;
+					firstClickedSquare = document.getElementById(firstClickedCoordinates);
 					pieceSelected = square.textContent;
-					firstClickCoordinates = square.id;
-					console.log(firstClickCoordinates);
-				} else if (firstClick && square.textContent === '') {
+					square.style.opacity = 0.5;
+					console.log(firstClickedCoordinates);
+				} else if (firstClick && square.textContent === '' && firstClickedCoordinates) {
+					// When clicking an empty square on the second click
 					square.style.opacity = 0.5;
 					setTimeout(() => {
 						squares.forEach((opacityOfSquare) => {
 							opacityOfSquare.style.opacity = 1;
 						});
-						firstClick = false;
 					}, 200);
-					SecondClickCoordinates = square.id;
-					firstClickedSquare = document.getElementById(
-						firstClickCoordinates
-					);
 					firstClickedSquare.textContent = '';
-					console.log(SecondClickCoordinates);
-				} else if (firstClick && square.textContent !== '') {
-					setTimeout(() => {
-						squares.forEach((opacityOfSquare) => {
-							opacityOfSquare.style.opacity = 1;
-						});
-					}, 200);
-					setTimeout(() => {
-						square.style.opacity = 0.5;
-					}, 200);
-					firstClick = true;
+					square.textContent = pieceSelected;
+					firstClick = false;
+					console.log(square.id);
 				} else {
+					//When clicking another piece after first click
+					firstClickedSquare.style.opacity = 1;
 					firstClick = false;
 				}
 			}
-			square.textContent = pieceSelected;
-			console.log(pieceSelected);
 		});
 	});
 }
