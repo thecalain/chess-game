@@ -4,6 +4,7 @@ const playBlack = document.getElementById('play-black');
 const board = document.getElementById('board');
 let gameSetup = true;
 let gameOngoing = false;
+// let whoseMoveTurn;
 
 function gameStart() {
 	playWhite.addEventListener('click', () => {
@@ -12,6 +13,7 @@ function gameStart() {
 		board.style.display = 'grid';
 		gameSetup = false;
 		gameOngoing = true;
+		// whoseMoveTurn = 'white';
 	});
 
 	playBlack.addEventListener('click', () => {
@@ -25,50 +27,80 @@ function gameStart() {
 		});
 		gameSetup = false;
 		gameOngoing = true;
+		// whoseMoveTurn = 'white';
 	});
 }
 
+const whitePieces = ['♖', '♘', '♗', '♕', '♔', '♙'];
+const blackPieces = ['♜', '♞', '♝', '♛', '♚', '♟'];
+
+function isWhiteOrBlack(piece) {
+	let isWhite = whitePieces.includes(piece);
+	let isBlack = blackPieces.includes(piece);
+	if (isWhite) {
+		return 'white';
+	} else if (isBlack) {
+		return 'black';
+	} else {
+		return null;
+	}
+}
+
+console.log(isWhiteOrBlack('♜'), isWhiteOrBlack('♖'));
+
+let firstClick = false;
 let firstClickedCoordinates;
 let firstClickedSquare;
-let secondClickedCoordinates;
-let secondClickedSquare;
 let pieceSelected;
-let firstClick = false;
 
-function generalMovement() {
-	//No capturing logic yet
-	squares.forEach((square) => {
-		square.addEventListener('click', () => {
-			if (!gameSetup && gameOngoing) {
-				if (!firstClick && square.textContent !== '') {
-					// When clicking a piece for the first time
-					firstClick = true;
-					firstClickedCoordinates = square.id;
-					firstClickedSquare = document.getElementById(firstClickedCoordinates);
-					pieceSelected = square.textContent;
+function generalMovement() {}
+squares.forEach((square) => {
+	square.addEventListener('click', () => {
+		if (!gameSetup && gameOngoing) {
+			if (!firstClick && square.textContent !== '') {
+				// When clicking a piece for the first time
+				firstClick = true;
+				firstClickedCoordinates = square.id;
+				firstClickedSquare = document.getElementById(firstClickedCoordinates);
+				pieceSelected = square.textContent;
+				square.style.opacity = 0.5;
+				console.log(firstClickedCoordinates);
+				console.log(pieceSelected);
+			} else if (firstClick && square.textContent === '') {
+				// When clicking an empty square on the second click
+				square.style.opacity = 0.5;
+				setTimeout(() => {
+					squares.forEach((opacityOfSquare) => {
+						opacityOfSquare.style.opacity = 1;
+					});
+				}, 200);
+				firstClickedSquare.textContent = '';
+				square.textContent = pieceSelected;
+				firstClick = false;
+			} else {
+				if (isWhiteOrBlack(square.textContent) === isWhiteOrBlack(pieceSelected)) {
+					//When clicking another different colored piece after first click
+					console.log(square.textContent, pieceSelected);
+					console.log(isWhiteOrBlack(square.textContent), isWhiteOrBlack(pieceSelected)); // null null ---> why?
+					console.log(isWhiteOrBlack(square.textContent) === isWhiteOrBlack(pieceSelected));
 					square.style.opacity = 0.5;
-					console.log(firstClickedCoordinates);
-				} else if (firstClick && square.textContent === '' && firstClickedCoordinates) {
-					// When clicking an empty square on the second click
-					square.style.opacity = 0.5;
+					firstClickedSquare.textContent = '';
+					square.textContent = pieceSelected;
 					setTimeout(() => {
 						squares.forEach((opacityOfSquare) => {
 							opacityOfSquare.style.opacity = 1;
 						});
 					}, 200);
-					firstClickedSquare.textContent = '';
-					square.textContent = pieceSelected;
 					firstClick = false;
-					console.log(square.id);
 				} else {
-					//When clicking another piece after first click
+					//When clicking another same colored piece after first click
 					firstClickedSquare.style.opacity = 1;
 					firstClick = false;
 				}
 			}
-		});
+		}
 	});
-}
+});
 
 gameStart();
 generalMovement();
